@@ -138,7 +138,8 @@ void SpectatorMenu( void )
 		return;
 	}
 
-	gViewPort->m_pSpectatorPanel->ShowMenu( atoi( gEngfuncs.Cmd_Argv( 1 ) ) != 0 );
+	if( gViewPort )
+		gViewPort->m_pSpectatorPanel->ShowMenu( atoi( gEngfuncs.Cmd_Argv( 1 ) ) != 0 );
 }
 
 void ToggleScores( void )
@@ -773,12 +774,19 @@ void CHudSpectator::DirectorMessage( int iSize, void *pbuf )
 			READ_LONG(); // total number of spectator slots
 			m_iSpectatorNumber = READ_LONG(); // total number of spectator
 			READ_WORD(); // total number of relay proxies
-			gViewPort->UpdateSpectatorPanel();
+			if( gViewPort )
+				gViewPort->UpdateSpectatorPanel();
 			break;
 		case DRC_CMD_BANNER:
 			// gEngfuncs.Con_DPrintf( "GUI: Banner %s\n",READ_STRING() ); // name of banner tga eg gfx/temp/7454562234563475.tga
-			gViewPort->m_pSpectatorPanel->m_TopBanner->LoadImage( READ_STRING() );
-			gViewPort->UpdateSpectatorPanel();
+		{
+			const char *banner = READ_STRING(); // always read: the message continues
+			if( gViewPort )
+			{
+				gViewPort->m_pSpectatorPanel->m_TopBanner->LoadImage( banner );
+				gViewPort->UpdateSpectatorPanel();
+			}
+		}
 			break;
 		case DRC_CMD_STUFFTEXT:
 			gEngfuncs.pfnFilteredClientCmd( READ_STRING() );
@@ -914,7 +922,8 @@ void CHudSpectator::FindNextPlayer( bool bReverse )
 		VectorCopy( pEnt->angles, vJumpAngles );
 	}
 	iJumpSpectator = 1;
-	gViewPort->MsgFunc_ResetFade( NULL, 0, NULL );
+	if( gViewPort )
+		gViewPort->MsgFunc_ResetFade( NULL, 0, NULL );
 }
 
 void CHudSpectator::FindPlayer( const char *name )
@@ -970,7 +979,8 @@ void CHudSpectator::FindPlayer( const char *name )
 	}
 
 	iJumpSpectator = 1;
-	gViewPort->MsgFunc_ResetFade( NULL, 0, NULL );
+	if( gViewPort )
+		gViewPort->MsgFunc_ResetFade( NULL, 0, NULL );
 }
 
 void CHudSpectator::HandleButtonsDown( int ButtonPressed )
@@ -1176,7 +1186,8 @@ void CHudSpectator::SetModes( int iNewMainMode, int iNewInsetMode )
 			SetCrosshair( 0, m_crosshairRect, 0, 0, 0 );
 		}
 
-		gViewPort->MsgFunc_ResetFade( NULL, 0, NULL );
+		if( gViewPort )
+			gViewPort->MsgFunc_ResetFade( NULL, 0, NULL );
 
 		char string[128];
 		sprintf( string, "#Spec_Mode%d", g_iUser1 );
@@ -1184,7 +1195,8 @@ void CHudSpectator::SetModes( int iNewMainMode, int iNewInsetMode )
 		gHUD.m_TextMessage.MsgFunc_TextMsg( NULL, strlen( string ) + 1, string );
 	}
 
-	gViewPort->UpdateSpectatorPanel();
+	if( gViewPort )
+		gViewPort->UpdateSpectatorPanel();
 }
 
 bool CHudSpectator::IsActivePlayer( cl_entity_t *ent )
@@ -1836,7 +1848,8 @@ void CHudSpectator::CheckSettings()
 		m_pip->value = INSET_OFF;
 
 	// draw small border around inset view, adjust upper black bar
-	gViewPort->m_pSpectatorPanel->EnableInsetView( m_pip->value != INSET_OFF );
+	if( gViewPort )
+		gViewPort->m_pSpectatorPanel->EnableInsetView( m_pip->value != INSET_OFF );
 }
 
 int CHudSpectator::ToggleInset( bool allowOff )

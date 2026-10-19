@@ -101,11 +101,14 @@ void VGui_Startup()
 
 		gViewPort->Initialize();
 	}
+#if !NO_VGUI_VIEWPORT
+	// (without it, low memory: the scoreboard and texts are drawn by the HUD, no VGUI menus)
 	else
 	{
 		gViewPort = new TeamFortressViewport( 0, 0, root->getWide(), root->getTall() );
 		gViewPort->setParent( root );
 	}
+#endif
 
 	/*
 	TexturePanel *texturePanel = new TexturePanel();

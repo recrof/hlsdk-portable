@@ -76,6 +76,8 @@ Then you can use another oneliner to query all variables:
 #undef XASH_NETBSD
 #undef XASH_OPENBSD
 #undef XASH_POSIX
+#undef XASH_ESP32
+#undef XASH_XTENSA
 #undef XASH_PPC
 #undef XASH_RISCV
 #undef XASH_RISCV_DOUBLEFP
@@ -141,6 +143,8 @@ Then you can use another oneliner to query all variables:
 		#define XASH_EMSCRIPTEN 1
 	#elif defined __gnu_hurd__
 		#define XASH_HURD 1
+	#elif defined ESP_PLATFORM
+		#define XASH_ESP32 1 // ESP-IDF: newlib and FreeRTOS
 	#else
 		#error
 	#endif
@@ -258,6 +262,8 @@ Then you can use another oneliner to query all variables:
 #elif defined __s390x__
 	#define XASH_64BIT 1
 	#define XASH_S390X 1
+#elif defined __XTENSA__
+	#define XASH_XTENSA 1
 #else
 	#error "Place your architecture name here! If this is a mistake, try to fix conditions above and report a bug"
 #endif

@@ -348,6 +348,9 @@ void CVoiceStatus::CreateEntities()
 		if(pClient == localPlayer && !cam_thirdperson)
 			continue;
 
+		if( iOutModel >= VOICE_HEAD_MODELS )
+			break;
+
 		cl_entity_s *pEnt = &m_VoiceHeadModels[iOutModel];
 		++iOutModel;
 

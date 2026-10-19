@@ -67,7 +67,8 @@ public:
 
 	virtual void UpdateCursorState()
 	{
-		gViewPort->UpdateCursorState();
+		if( gViewPort )
+			gViewPort->UpdateCursorState();
 	}
 
 	virtual int	GetAckIconHeight()
